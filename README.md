@@ -11,10 +11,10 @@ To compile and run the project, it is necessary to have the essential dependenci
 
 ```bash
 # Package update
-$ sudo apt update
+ sudo apt update
 # Optional GUI tools for debugging and visualization
-$ sudo apt install ros-humble-joint-state-publisher-gui
-$ sudo apt install ros-humble-rqt-image-view
+ sudo apt install ros-humble-joint-state-publisher-gui
+ sudo apt install ros-humble-rqt-image-view
 ```
 
 # 3. 🏗️ BUILD
