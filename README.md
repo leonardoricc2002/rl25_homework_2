@@ -25,7 +25,7 @@ Clone this repository into the desired folder :
 ```bash
  git clone https://github.com/leonardoricc2002/rl25_homework1.git
 ```
-``bash
+```bash
  colcon build
  source install/setup.bash
 ```
