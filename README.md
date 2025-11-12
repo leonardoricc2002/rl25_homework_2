@@ -1,87 +1,95 @@
-# 🤖 Project: ARMANDO Robotic Manipulator Simulation (4 DoF)
-Course: Robotic Lab 
+## 🤖 Project: Control your robot
+**Course: Robotics Lab**
 
-Student: Leonardo Riccardi / P38000358 
+**Student: Leonardo Riccardi / P38000358**
 
-# 🎯 Project Objective
-The objective of this project is the creation of a ROS 2 workspace containing the necessary packages for the simulation of a 4 Degrees of Freedom (DoF) robotic manipulator, named Armando, within the Gazebo simulation environment, using ROS 2 Humble and ros2_control.
+---
 
-# 🛠️ Prerequisites
-To compile and run the project, it is necessary to have the essential dependencies for ROS 2 and Gazebo installed. After logging into your container or virtual machine, be sure to install:
+## 🎯 Project Objective
+
+The primary goal of this homework is to **develop kinematic and vision-based controllers** for a simulated robotic manipulator. This includes implementing KDL for **joint-limit avoidance** (using null-space projection) and utilizing the `aruco_ros` package to execute a **visual "Look-at-Point" task**.
+
+---
+
+## ⚙️ Prerequisites and Setup
+
+To compile and run the project, ensure you have a standard **ROS 2** (e.g., Humble/Iron) workspace setup and the following dependencies installed.
+
+### Dependencies Installation
+
+It is necessary to have the essential dependencies, including those for plotting results:
 
 ```bash
-# Package update
- sudo apt update
-# Optional GUI tools for debugging and visualization
- sudo apt install ros-humble-joint-state-publisher-gui
- sudo apt install ros-humble-rqt-image-view
+sudo apt update
+sudo apt install python3-pip
 ```
-
-# 3. 🏗️ BUILD
-Cloning the Repository
-
-Clone this repository into the desired folder :
-
-```bash
- git clone https://github.com/leonardoricc2002/rl25_homework1.git
+ Install Python packages for plotting
 ```
-```bash
- colcon build
- source install/setup.bash
+python3 -m pip install --user pandas matplotlib
+pip install "numpy<2" pandas matplotlib
+```
+## Build
+Clone this package in the `src` folder of your ROS 2 workspace.
+```
+https://github.com/leonardoricc2002/Homework_2.git
+
+```
+Build and source the setup files
+```
+colcon build 
+source install/setup.bash
 ```
 # 🚀 HOW TO LAUNCH
-Visualization Robot (Rviz2)
-
-To see only the kinematic model of the robot and its frames in RViz2:
-
-```bash 
- ros2 launch armando_description armando_display.launch.py
+Launch the iiwa robot state publisher and Rviz2 for visualization.
 ```
+ros2 launch iiwa_bringup iiwa.launch.py use_sim:=false rviz:=true
+```
+On the terminal 2. Start the standard KDL controller (velocity_ctrl) and immediately execute the trajectory.
 
-Complete Simulation (Gazebo)
-The main launchfile loads the robot in Gazebo and starts the controllers (ros2_control).
+```
+source install/setup.bash
+ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=velocity_ctrl auto_start:=true
+```
+Terminal 2. Generate and display plots (e.g., commanded velocities, joint positions) from the velocity_ctrl log file.
+```
+source install/setup.bash
+python3 src/ros2_kdl_package/scripts/plot_results.py log_vel.csv
+```
+Terminal 2 .Start the controller with joint-limit avoidance enabled via null-space projection
+```
+ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=velocity_ctrl_null auto_start:=true
+```
+Terminal 3.Generate plots specific to the null-space controller run.
+```
+python3 src/ros2_kdl_package/scripts/plot_results.py log_null.csv
+```
+# 🕹️ INTERACTION AND CONTROL----ACTION-CLIENT----
+Launch the Action Server and wait for a goal (trajectory execution is initially suspended).Terminal 2 
+```
+ros2 launch ros2_kdl_package ros2_kdl_node.launch.py auto_start:=false
 
-Default Control Mode (Position): Starts the joint position controller.
-```bash
- ros2 launch armando_gazebo armando_world.launch.py
 ```
-Position Control Mode (Position): Starts the joint position controller.
-```bash
- ros2 launch armando_gazebo armando_world.launch.py controller_mode:=position.
+Run the Action Client to send the trajectory goal and monitor feedback.Open another terminal and type:
 ```
-Trajectory Mode (requires external node): Starts the joint trajectory controller.
-```bash
- ros2 launch armando_gazebo armando_world.launch.py controller_mode:=trajectory
+ros2 run ros2_kdl_package linear_traj_client
 ```
-#  🕹️ INTERACTION AND CONTROL
-Manual Position Control (Test)
+## LAUNCH GAZEBO. Vision-based control
+Open Terminal 1. This starts the robot in the Gazebo world containing the ArUco marker.
+```
+ros2 launch iiwa_bringup iiwa.launch.py use_sim:=true rviz:=false
+```
+Open Terminal 2 to verify that the camera is active and detecting the marker.
+```
+ros2 run rqt_image_view rqt_image_view 
+```
+Open Terminal 3 to activate the vision_ctrl. The robot will attempt to align its camera with the marker.
+```
+source install/setup.bash
+ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=vision_ctrl auto_start:=true
+```
+Call the Gazebo service to move the ArUco marker; the robot should immediately react to maintain visual alignment.
 
-To send a specific position setpoint to the joints (only in position mode), where the values are in the order [j0, j1, j2, j3] in radians:
-Open a new terminal and run the source command.
-Send the commands:
-```bash
-# Zero Position (to stabilize the robot)
- ros2 topic pub --rate 10 /arm_position_controller/commands std_msgs/msg/Float64MultiArray "{data: [0.0, 0.0, 0.0, 0.0]}"
 ```
-
-To visualize the real-time video feed from the simulated camera in Gazebo: Launch rqt_image_view (after running source in a new terminal) and select the /camera/image topic:
-```bash
- ros2 run rqt_image_view rqt_image_view
-```
-# 🔍 VERIFICATION AND DEBUGGING
-To confirm correct operation and monitor the system status:
-
-Active Controller Verification
-
-To confirm that the controllers have been loaded and started correctly:
-```bash
- ros2 control list_controllers
-```
-To see all running nodes:
-```bash
- ros2 node list
-```
-To see all topics:
-```bash
- ros2 topic list
+source install/setup.bash
+ros2 service call /world/iiwa_aruco_world/set_pose ros_gz_interfaces/srv/SetEntityPose "{entity: {name: 'aruco_marker_static_instance'}, pose: {position: {x: 0.7, y: 0.1, z: 1.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
 ```
