@@ -1,0 +1,34 @@
+ros2_kdl_node:
+  ros__parameters:
+    # Modalità di controllo
+    ctrl_mode: "velocity_ctrl"
+
+    # Guadagno del controller (Kp)
+    Kp: 0.5
+
+    lambda: 0.1
+
+    # Traiettoria
+    traj_duration: 1.5        # durata totale della traiettoria in secondi
+    acc_duration: 0.5        # durata della fase di accelerazione
+    total_time: 3.0           # tempo totale per la traiettoria
+    trajectory_len: 70       # numero di step della traiettoria
+
+    # Target finale dell'end effector
+    end_position: [0.5, -0.2, 0.6]  # posizione finale visibile rispetto a quella iniziale
+
+    # Parametri aggiuntivi per partire dalla posizione corrente
+    use_current_as_start: true       # usa la posizione corrente come punto iniziale
+
+    # Interfaccia di comando
+    cmd_interface: "velocity"
+
+    # Tipo di traiettoria
+    traj_type: "linear"
+    s_type: "trapezoidal"
+
+    # Velocità massima dei joint (per sicurezza e movimento visibile)
+    max_joint_vel: 0.4
+
+    # Timeout attesa /joint_states
+    wait_for_joint_states: true

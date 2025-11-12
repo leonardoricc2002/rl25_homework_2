@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="iiwa_camera_macro" params="parent_link">
+
+    <!-- Link della fotocamera -->
+    <link name="camera_link">
+      <visual>
+        <geometry>
+           <box size="0.1 0.1 0.1"/>
+      </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <material name="blue">
+          <color rgba="0.0 0.0 1.0 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.1" radius="0.03"/>
+        </geometry>
+        <origin xyz="0 0 0.07" rpy="0 0 0"/>
+      </collision>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0.05"/>
+        <inertia ixx="0.0001" iyy="0.0001" izz="0.0001" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+
+    <!-- Giunto fisso per montare la fotocamera sull'end-effector -->
+    <joint name="camera_joint" type="fixed">
+      <parent link="${parent_link}"/>  <!-- qui sarà tool0 -->
+      <child link="camera_link"/>
+      <origin xyz="0.0 0.0 0.0" rpy="0 -1.5708 0"/> <!-- spostamento camera rispetto a tool0 -->
+    </joint>
+
+    <!-- Sensore Gazebo -->
+    <gazebo reference="camera_link">
+      <sensor name="camera_sensor" type="camera">
+        <camera>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>true</visualize>
+        <topic>/camera/color/image_raw</topic>
+        <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+          <render_engine>ogre2</render_engine>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
