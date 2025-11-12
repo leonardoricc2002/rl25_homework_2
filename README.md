@@ -18,7 +18,7 @@ To compile and run the project, ensure you have a standard **ROS 2** (e.g., Humb
 ## Build
 Clone this package in the `src` folder of your ROS 2 workspace.
 ```
-https://github.com/leonardoricc2002/rl25_homework_2.git
+git clone https://github.com/leonardoricc2002/rl25_homework_2.git
 ```
 Build and source the setup files
 ```
