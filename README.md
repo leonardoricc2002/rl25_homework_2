@@ -63,12 +63,12 @@ Terminal 3.Generate plots specific to the null-space controller run.
 python3 src/ros2_kdl_package/scripts/plot_results.py log_null.csv
 ```
 # 🕹️ INTERACTION AND CONTROL----ACTION-CLIENT----
-Launch the Action Server and wait for a goal (trajectory execution is initially suspended).Terminal 2 
+Terminal 2 .Launch the Action Server and wait for a goal (trajectory execution is initially suspended).Terminal 2 
 ```
 ros2 launch ros2_kdl_package ros2_kdl_node.launch.py auto_start:=false
 
 ```
-Run the Action Client to send the trajectory goal and monitor feedback.Open another terminal and type:
+Terminal 3.Run the Action Client to send the trajectory goal and monitor feedback.
 ```
 ros2 run ros2_kdl_package linear_traj_client
 ```
@@ -86,8 +86,7 @@ Open Terminal 3 to activate the vision_ctrl. The robot will attempt to align its
 source install/setup.bash
 ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=vision_ctrl auto_start:=true
 ```
-Call the Gazebo service to move the ArUco marker; the robot should immediately react to maintain visual alignment.
-
+Terminal 4.Call the Gazebo service to move the ArUco marker; the robot should immediately react to maintain visual alignment.
 ```
 source install/setup.bash
 ros2 service call /world/iiwa_aruco_world/set_pose ros_gz_interfaces/srv/SetEntityPose "{entity: {name: 'aruco_marker_static_instance'}, pose: {position: {x: 0.7, y: 0.1, z: 1.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}}}"
