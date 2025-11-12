@@ -15,19 +15,6 @@ The primary goal of this homework is to **develop kinematic and vision-based con
 
 To compile and run the project, ensure you have a standard **ROS 2** (e.g., Humble/Iron) workspace setup and the following dependencies installed.
 
-### Dependencies Installation
-
-It is necessary to have the essential dependencies, including those for plotting results:
-
-```bash
-sudo apt update
-sudo apt install python3-pip
-```
- Install Python packages for plotting
-```
-python3 -m pip install --user pandas matplotlib
-pip install "numpy<2" pandas matplotlib
-```
 ## Build
 Clone this package in the `src` folder of your ROS 2 workspace.
 ```
@@ -39,24 +26,37 @@ colcon build
 source install/setup.bash
 ```
 # 🚀 HOW TO LAUNCH
-Launch the iiwa robot state publisher and Rviz2 for visualization.
+Terminal 1: Launch the iiwa robot state publisher and Rviz2 for visualization.
 ```
 ros2 launch iiwa_bringup iiwa.launch.py use_sim:=false rviz:=true
 ```
-On the terminal 2. Start the standard KDL controller (velocity_ctrl) and immediately execute the trajectory.
+Terminal 2. Start the standard KDL controller (velocity_ctrl) and immediately execute the trajectory.
 
 ```
 source install/setup.bash
 ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=velocity_ctrl auto_start:=true
 ```
-Terminal 2. Generate and display plots (e.g., commanded velocities, joint positions) from the velocity_ctrl log file.
+Terminal 2 .Otherwise ,start the controller with joint-limit avoidance enabled via null-space projection
+```
+ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=velocity_ctrl_null auto_start:=true
+```
+### Dependencies Installation
+
+Terminal 3. It is necessary to have the essential dependencies, including those for plotting results:
+
+```bash
+sudo apt update
+sudo apt install python3-pip
+```
+ Install Python packages for plotting
+```
+python3 -m pip install --user pandas matplotlib
+pip install "numpy<2" pandas matplotlib
+```
+Terminal 3. Generate and display plots (e.g., commanded velocities, joint positions) from the velocity_ctrl log file.
 ```
 source install/setup.bash
 python3 src/ros2_kdl_package/scripts/plot_results.py log_vel.csv
-```
-Terminal 2 .Start the controller with joint-limit avoidance enabled via null-space projection
-```
-ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=velocity_ctrl_null auto_start:=true
 ```
 Terminal 3.Generate plots specific to the null-space controller run.
 ```
