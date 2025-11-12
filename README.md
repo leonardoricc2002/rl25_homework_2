@@ -31,7 +31,7 @@ pip install "numpy<2" pandas matplotlib
 ## Build
 Clone this package in the `src` folder of your ROS 2 workspace.
 ```
-
+https://github.com/leonardoricc2002/rl25_homework_2.git
 ```
 Build and source the setup files
 ```
