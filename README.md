@@ -40,6 +40,7 @@ ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=velocity_ctrl auto_st
 ```
 Terminal 2. Otherwise ,start the controller with joint-limit avoidance enabled via null-space projection
 ```
+source install/setup.bash
 ros2 launch ros2_kdl_package ros2_kdl_node.launch.py ctrl:=velocity_ctrl_null auto_start:=true
 ```
 ### Dependencies Installation
@@ -62,6 +63,7 @@ python3 src/rl25_homework_2/ros2_kdl_package/scripts/plot_results.py log_vel.csv
 ```
 Terminal 3. Generate plots specific to the null-space controller run.
 ```
+source install/setup.bash
 python3 src/rl25_homework_2/ros2_kdl_package/scripts/plot_results.py log_null.csv
 ```
 # 🕹️ INTERACTION AND CONTROL----ACTION-CLIENT----
