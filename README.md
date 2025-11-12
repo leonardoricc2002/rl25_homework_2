@@ -71,7 +71,7 @@ Terminal 1. Launch the iiwa robot state publisher and Rviz2 for visualization.
 ```
 ros2 launch iiwa_bringup iiwa.launch.py use_sim:=false rviz:=true
 ```
-Terminal 2. Launch the Action Server and wait for a goal (trajectory execution is initially suspended).Terminal 2 
+Terminal 2. Launch the Action Server and wait for a goal (trajectory execution is initially suspended).
 ```
 ros2 launch ros2_kdl_package ros2_kdl_node.launch.py auto_start:=false
 
