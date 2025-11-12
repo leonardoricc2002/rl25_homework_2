@@ -22,7 +22,9 @@ git clone https://github.com/leonardoricc2002/rl25_homework_2.git
 ```
 Build and source the setup files
 ```
-colcon build 
+colcon build
+```
+```
 source install/setup.bash
 ```
 # 🚀 HOW TO LAUNCH
@@ -63,6 +65,10 @@ Terminal 3. Generate plots specific to the null-space controller run.
 python3 src/ros2_kdl_package/scripts/plot_results.py log_null.csv
 ```
 # 🕹️ INTERACTION AND CONTROL----ACTION-CLIENT----
+Terminal 1. Launch the iiwa robot state publisher and Rviz2 for visualization.
+```
+ros2 launch iiwa_bringup iiwa.launch.py use_sim:=false rviz:=true
+```
 Terminal 2. Launch the Action Server and wait for a goal (trajectory execution is initially suspended).Terminal 2 
 ```
 ros2 launch ros2_kdl_package ros2_kdl_node.launch.py auto_start:=false
