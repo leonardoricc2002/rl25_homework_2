@@ -94,6 +94,7 @@ ros2 launch iiwa_bringup iiwa.launch.py use_sim:=true rviz:=false
 ```
 Terminal 2. To verify that the camera is active and detecting the marker.
 ```
+source install/setup.bash
 ros2 run rqt_image_view rqt_image_view 
 ```
 Terminal 3. To activate the vision_ctrl. The robot will attempt to align its camera with the marker.
